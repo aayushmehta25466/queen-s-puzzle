@@ -1,0 +1,110 @@
+# Game Logic Documentation for 5x5 Queen's Puzzle
+
+## Overview
+This document provides detailed explanations of the game logic and calculations used in the 5x5 Queen's Puzzle game. It serves as internal documentation for future reference.
+
+## Board Setup
+- The board is a 5x5 grid represented by a 2D array `int board[N][N]`.
+- `N` is defined as 5, representing the size of the board.
+- `board[i][j]` is 0 if the cell is empty and 1 if a queen is placed in the cell.
+- `queenCount` keeps track of the number of queens placed on the board.
+
+## SDL Setup
+- `SDL_Window *window`: The main window for the game.
+- `SDL_Renderer *renderer`: The renderer used to draw textures.
+- `SDL_Texture *cellTexture`: The texture for the board cells.
+- `SDL_Texture *queenTexture`: The texture for the queens.
+- `TTF_Font *font`: The font used for rendering text.
+
+## Function: isSafe
+### Purpose
+Checks if placing a queen at a specific position `(row, col)` is safe.
+
+### Parameters
+- `int row`: The row index.
+- `int col`: The column index.
+
+### Return Value
+- `bool`: Returns `true` if it is safe to place a queen, `false` otherwise.
+
+### Logic
+1. Check the same column for any queens.
+2. Check the same row for any queens.
+3. Check the upper-left diagonal for any queens.
+4. Check the upper-right diagonal for any queens.
+5. Check the lower-left diagonal for any queens.
+6. Check the lower-right diagonal for any queens.
+
+## Function: renderText
+### Purpose
+Renders text on the screen at a specified position.
+
+### Parameters
+- `const char *text`: The text to render.
+- `int x`: The x-coordinate of the text.
+- `int y`: The y-coordinate of the text.
+- `SDL_Color color`: The color of the text.
+
+### Logic
+1. Create an SDL surface from the text using the specified font and color.
+2. Create an SDL texture from the surface.
+3. Calculate the destination rectangle for the text.
+4. Render the texture to the screen.
+5. Free the surface and destroy the texture.
+
+## Function: resetGame
+### Purpose
+Resets the game board to its initial state.
+
+### Logic
+1. Set `queenCount` to 0.
+2. Iterate through the board array and set all cells to 0.
+
+## Main Function
+### Initialization
+1. Initialize SDL, TTF, and IMG libraries.
+2. Create the SDL window and renderer.
+3. Load the font and textures.
+
+### Event Loop
+1. Poll for SDL events.
+2. Handle quit and escape key events to exit the game.
+3. Handle mouse button down events to place queens or reset the game.
+
+### Rendering
+1. Clear the screen.
+2. Render the board and queens.
+3. Render the text showing the number of queens placed.
+4. Render the reset button.
+5. Render the "All Queens Placed!" message if all 5 queens are placed.
+6. Present the rendered frame.
+
+### Cleanup
+1. Destroy textures, renderer, and window.
+2. Close the font.
+3. Quit SDL, TTF, and IMG libraries.
+
+## Calculations
+### Cell Dimensions and Board Position
+To ensure that the board is centered within the window and each cell is correctly sized and positioned, the following calculations are performed:
+
+1. **Calculate Cell Dimensions:**
+   - `newWidth = width / 8`: This divides the window width by 8 to determine the width of each cell. The division by 8 ensures that the cells are appropriately sized to fit within the window.
+   - `newHeight = height / 8`: This divides the window height by 8 to determine the height of each cell. The division by 8 ensures that the cells are appropriately sized to fit within the window.
+
+2. **Calculate Board Start Position:**
+   - `startX = (width - N * newWidth) / 2`: This calculates the horizontal offset needed to center the board within the window. It subtracts the total width of the board (`N * newWidth`) from the window width and divides by 2 to center the board.
+   - `startY = (height - N * newHeight) / 2`: This calculates the vertical offset needed to center the board within the window. It subtracts the total height of the board (`N * newHeight`) from the window height and divides by 2 to center the board.
+
+### Mouse Click Handling
+When the user clicks on the board, the mouse coordinates (`x`, `y`) are used to determine the corresponding row and column on the board. The following calculations are performed:
+
+1. **Calculate Column:**
+   - `int col = (x - startX) / newWidth`: This calculates the column index by subtracting the horizontal offset (`startX`) from the x-coordinate of the mouse click and dividing by the cell width (`newWidth`). This determines which column the click occurred in.
+
+2. **Calculate Row:**
+   - `int row = (y - startY) / newHeight`: This calculates the row index by subtracting the vertical offset (`startY`) from the y-coordinate of the mouse click and dividing by the cell height (`newHeight`). This determines which row the click occurred in.
+
+These calculations ensure that the correct cell on the board is identified based on the mouse click position.
+
+This documentation provides a comprehensive overview of the game logic and calculations used in the 5x5 Queen's Puzzle game. It should help you understand the code and make future modifications easier.
